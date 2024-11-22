@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: flask-hello
+spec:
+  selector:
+    app: flask-hello
+  ports:
+  - protocol: "TCP"
+    port: 5050
+    targetPort: 5000
+  type: NodePort
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flask-hello
+spec:
+  replicas: 1
+  selector:             
+    matchLabels:
+      app: flask-hello  
+  template:
+    metadata:
+      labels:
+        app: flask-hello
+    spec:
+      containers:
+      - name: flask-hello
+        image: flask-hello:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 5000
